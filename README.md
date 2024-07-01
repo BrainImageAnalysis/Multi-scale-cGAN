@@ -7,10 +7,11 @@ Images for Neuron Segmentation" paper accepted for the MIDL 2024 conference. <ht
 
 The objective of this model is to automatically generate realistic microscopy images, conditioned on a given neuron morphology input. A multi-scale cascade of conditional generative adversarial networks iteratively refines the generated image resolution using patches of decreasing field-of-view. The diversity of the generated images is enhanced through the loss function and random vectors.
 
-<img src="simplified_scales.png" alt="Concept of the multi-scale image generation." width="1000"/>
+<img src="overview.png" alt="Concept of the multi-scale image generation." width="1000"/>
 
-The labelled synthetic image generated can be used to train tracing models for instance. The method can be extended to other tree-like structures such as vessels (e.g. generation of synthetic retina images). 
+The labelled synthetic image generated can be used to train tracing models. The method can be extended to other tree-like structures such as vessels (e.g. generation of synthetic retina images). 
 
+<img src="example.png" alt="Some generated images." width="1000"/>
 
 ## How to use
 

@@ -21,7 +21,7 @@ from data import *
 
 class MultiResGenerator:
 
-	def __init__(self, output_folder, nb_res, real_patch_size, model_patch_size, model_type, itrs, augmentation, stride, lr, lbd, nz, batch_size):
+	def __init__(self, output_folder, nb_res, real_patch_size, model_patch_size, model_type, itrs, augmentation, stride, lr, lbd, nz, batch_size, n_gt_channels = None, n_img_channels = None):
 
 		self.output_folder = output_folder
 
@@ -49,6 +49,12 @@ class MultiResGenerator:
 		self.datasets = {}
 
 		self.z = {}
+
+		# Write parameters 
+		self.write_parameters()
+		self.n_gt_channels = n_gt_channels
+		self.n_img_channels = n_img_channels
+
 
 
 	def load_images(self, img_folder, data_type, dataset_name, equalize, resize = None, data_range = [-1,1], file_list = [], repeat = 1, write = True):
@@ -116,12 +122,13 @@ class MultiResGenerator:
 						self.images[dataset_name][data_type[i]][n] = torch.cat((self.images[dataset_name][data_type[i]][n], img), dim = 0)
 					else:
 						self.images[dataset_name][data_type[i]][n] = img
-
-		self.n_gt_channels = self.images[dataset_name]["gt"][list(self.images[dataset_name]["gt"].keys())[0]].shape[0]
-		self.n_img_channels = self.images[dataset_name]["img"][list(self.images[dataset_name]["img"].keys())[0]].shape[0]
+		if self.n_gt_channels is None:
+			self.n_gt_channels = self.images[dataset_name]["gt"][list(self.images[dataset_name]["gt"].keys())[0]].shape[0]
+		if self.n_img_channels is None:
+			self.n_img_channels = self.images[dataset_name]["img"][list(self.images[dataset_name]["img"].keys())[0]].shape[0]
 
 		# Write list of files
-		self.write_dataset_file(dataset_name)
+		#self.write_dataset_file(dataset_name)
 
 		# Write images
 		if write:
@@ -221,7 +228,7 @@ class MultiResGenerator:
 			nfd = (256, 128, 64, 32, 16)
 			ndf = (64, 128, 256, 256, 256)
 		else:
-			print("Network resolution not handled.")
+			print("Network resolution not implemented.")
 
 
 		if self.model_type[res_id] == "RefinementcGAN":
@@ -724,6 +731,8 @@ class MultiResGenerator:
 		print("Training " + self.model_type[res_id] + " model")
 
 		epochs = int(self.itrs[res_id] / len(self.datasets[dataset_name][res_id]["dataloader"]))
+		if epochs < 5:
+			epochs = 5
 		for e in range(epochs):
 			self.models[res_id].train(self.datasets[dataset_name][res_id]["dataloader"])
 
@@ -787,7 +796,7 @@ class MultiResGenerator:
 			# Write repeat and z vector
 			if res_id == 0:
 				self.write_repeat(res_id, dataset_name, nb = 24)
-				self.write_z_vectors(dataset_name)
+				#self.write_z_vectors(dataset_name)
 
 	
 		# Write structure
