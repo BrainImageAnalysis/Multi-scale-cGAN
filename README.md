@@ -23,3 +23,5 @@ The labelled synthetic image generated can be used to train tracing models. The 
 
 If you use this code, please cite the following article:
 
+Decroocq, M., Xu, B., Thompson-Peer, K. L., Moore, A., & Skibbe, H. (2024, December). Multi-scale Stochastic Generation of Labelled Microscopy Images for Neuron Segmentation. In Medical Imaging with Deep Learning (pp. 352-366). PMLR.
+
